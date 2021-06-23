@@ -4,11 +4,11 @@ from .commands import encode_string
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 DB_CHANNEL_ID = os.environ.get("DB_CHANNEL_ID")
-
+AUTH_USERS = list(int(i) for i in os.environ.get("AUTH_USERS", "").split(" "))
 
 
 #################################### FOR PRIVATE ################################################
-@Client.on_message((filters.document|filters.video|filters.audio|filters.photo) & filters.incoming & ~filters.edited & ~filters.channel)
+@Client.on_message((filters.document|filters.video|filters.audio|filters.photo) & filters.incoming & filters.AUTH_USERS & ~filters.edited & ~filters.channel)
 async def storefile(c, m):
     send_message = await m.reply_text("**Processing...**", quote=True)
     if m.document:
